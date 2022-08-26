@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TopBannerTableViewCell" rowHeight="174" id="0Oc-a0-kAp" customClass="TopBannerTableViewCell" customModule="YoutubeApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="318" height="174"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0Oc-a0-kAp" id="Dtb-st-7q4">
+                <rect key="frame" x="0.0" y="0.0" width="318" height="174"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="CYK-gJ-9KT">
+                        <rect key="frame" x="20" y="0.0" width="278" height="174"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Awv-c5-IRU" userLabel="284:135">
+                                <rect key="frame" x="0.0" y="0.0" width="278" height="174"/>
+                                <color key="backgroundColor" name="bgColor"/>
+                            </view>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <color key="backgroundColor" name="bgColor"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="CYK-gJ-9KT" secondAttribute="bottom" id="Ju1-Ee-vnr"/>
+                    <constraint firstAttribute="trailing" secondItem="CYK-gJ-9KT" secondAttribute="trailing" constant="20" id="Mjd-IY-MoG"/>
+                    <constraint firstItem="CYK-gJ-9KT" firstAttribute="leading" secondItem="Dtb-st-7q4" secondAttribute="leading" constant="20" id="OdU-jr-m3Q"/>
+                    <constraint firstItem="CYK-gJ-9KT" firstAttribute="top" secondItem="Dtb-st-7q4" secondAttribute="top" id="ity-u6-CUi"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="bannerView" destination="Awv-c5-IRU" id="RRC-hJ-6NL"/>
+            </connections>
+            <point key="canvasLocation" x="786.95652173913049" y="112.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="bgColor">
+            <color red="0.11400000005960464" green="0.10599999874830246" blue="0.15099999308586121" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

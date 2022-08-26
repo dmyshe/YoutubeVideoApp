@@ -1,0 +1,37 @@
+PODS:
+  - GoogleAPIClientForREST/Core (1.2.1):
+    - GTMSessionFetcher (>= 1.1.7)
+  - GoogleAPIClientForREST/YouTube (1.2.1):
+    - GoogleAPIClientForREST/Core
+    - GTMSessionFetcher (>= 1.1.7)
+  - GTMSessionFetcher (2.0.0):
+    - GTMSessionFetcher/Full (= 2.0.0)
+  - GTMSessionFetcher/Core (2.0.0)
+  - GTMSessionFetcher/Full (2.0.0):
+    - GTMSessionFetcher/Core
+  - SDWebImage (5.13.2):
+    - SDWebImage/Core (= 5.13.2)
+  - SDWebImage/Core (5.13.2)
+  - youtube-ios-player-helper (1.0.4)
+
+DEPENDENCIES:
+  - GoogleAPIClientForREST/YouTube (~> 1.2.1)
+  - SDWebImage (~> 5.0)
+  - youtube-ios-player-helper
+
+SPEC REPOS:
+  trunk:
+    - GoogleAPIClientForREST
+    - GTMSessionFetcher
+    - SDWebImage
+    - youtube-ios-player-helper
+
+SPEC CHECKSUMS:
+  GoogleAPIClientForREST: a8b95a252014ce2e618df6b75dc72eca2c00b4af
+  GTMSessionFetcher: 681175626052e03fdde7952f7e9c7a9785719506
+  SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
+  youtube-ios-player-helper: e9b97535e816db3152179d84d999bc1807ecd689
+
+PODFILE CHECKSUM: 401cf053b72efa7154d34676228a84fe5d8b3cce
+
+COCOAPODS: 1.11.2

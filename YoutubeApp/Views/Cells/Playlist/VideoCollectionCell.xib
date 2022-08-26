@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="PlaylistContentCollectionViewCell" reuseIdentifier="VideoCollectionCell" id="lVs-Io-df2" customClass="VideoCollectionCell" customModule="YoutubeApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="356" height="263"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="lpX-jO-FWt">
+                <rect key="frame" x="0.0" y="0.0" width="356" height="263"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="250" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="PUH-rj-TW2" userLabel="Video image preview">
+                        <rect key="frame" x="0.0" y="0.0" width="356" height="192"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="cat1" translatesAutoresizingMaskIntoConstraints="NO" id="rH5-RS-Atb">
+                                <rect key="frame" x="0.0" y="0.0" width="356" height="192"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="rH5-RS-Atb" secondAttribute="height" multiplier="16:7" id="wvy-ZJ-inV"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                    </stackView>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="gc0-4q-h3g" userLabel="Name and subscribers">
+                        <rect key="frame" x="0.0" y="201" width="338" height="28"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hv9-sg-QX9">
+                                <rect key="frame" x="0.0" y="0.0" width="338" height="12"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="McH-C5-dBv">
+                                <rect key="frame" x="0.0" y="16" width="338" height="12"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="1" alpha="0.41643711010000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="28" id="rMz-jo-crR"/>
+                        </constraints>
+                    </stackView>
+                </subviews>
+                <color key="backgroundColor" name="bgColor"/>
+                <constraints>
+                    <constraint firstItem="PUH-rj-TW2" firstAttribute="leading" secondItem="lpX-jO-FWt" secondAttribute="leading" id="83g-80-1gJ"/>
+                    <constraint firstItem="gc0-4q-h3g" firstAttribute="top" secondItem="PUH-rj-TW2" secondAttribute="bottom" constant="9" id="Ft7-x6-57v"/>
+                    <constraint firstAttribute="trailing" secondItem="gc0-4q-h3g" secondAttribute="trailing" constant="18" id="Uk2-Zv-hLB"/>
+                    <constraint firstAttribute="trailing" secondItem="PUH-rj-TW2" secondAttribute="trailing" id="XFn-YU-hux"/>
+                    <constraint firstItem="PUH-rj-TW2" firstAttribute="top" secondItem="lpX-jO-FWt" secondAttribute="top" id="dqI-7l-OjK"/>
+                    <constraint firstAttribute="bottom" secondItem="gc0-4q-h3g" secondAttribute="bottom" id="fOe-MV-9ea"/>
+                    <constraint firstItem="gc0-4q-h3g" firstAttribute="leading" secondItem="lpX-jO-FWt" secondAttribute="leading" id="kdZ-TC-Jcr"/>
+                </constraints>
+            </collectionViewCellContentView>
+            <size key="customSize" width="356" height="281"/>
+            <connections>
+                <outlet property="channelNameLabel" destination="hv9-sg-QX9" id="TCk-9a-xgv"/>
+                <outlet property="channelPreviewImageView" destination="rH5-RS-Atb" id="YEH-yw-QbM"/>
+                <outlet property="channelSubscriptionsCountLabel" destination="McH-C5-dBv" id="6Hx-aY-ZhX"/>
+            </connections>
+            <point key="canvasLocation" x="-33.333333333333336" y="165.73660714285714"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="cat1" width="262" height="192"/>
+        <namedColor name="bgColor">
+            <color red="0.11400000005960464" green="0.10599999874830246" blue="0.15099999308586121" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
