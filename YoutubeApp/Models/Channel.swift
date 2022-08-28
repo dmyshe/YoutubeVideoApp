@@ -11,7 +11,7 @@ struct Channel {
     var title: String
     var id: String
     var subscribersCount: Int
-    var backGroundBannerURL: URL
+    var backGroundBannerURL: URL?
     var videoPlaylists: [Playlist]?
 }
 
