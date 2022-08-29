@@ -16,7 +16,7 @@ struct Channel {
 }
 
 
-// Its only get id, because I can't load a random YouTube YouTube channel. see 
+// Its only get id, because I can't load a random YouTube channels. See getRandomChannels(queryPart: String = "snippet") in YouTubeServiceAdapter or you can just  write FIXME to see what i mean.
 extension Channel {
     static var exampleData = [
         Channel(title: "ImagineDragons",
