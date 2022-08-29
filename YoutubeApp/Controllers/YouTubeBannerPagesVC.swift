@@ -29,10 +29,8 @@ class YouTubeBannerPageViewController: UIPageViewController {
     
     
     private let youTubeService = YouTubeServiceAdapter(apiKey: YoutubeAPI.apiKey)
-    
-    var channels: [Channel]? = []
-    
-    var exampleData = [Channel]()
+        
+    var channels = [Channel]()
     
     private var videos = [[Video]]()
     private var playlists = [Playlist]()
@@ -56,26 +54,26 @@ class YouTubeBannerPageViewController: UIPageViewController {
     
     private func fetchChannelInfo2() {
         Task(priority: .userInitiated) {
-            let id = exampleData[currentPage].id
+            let id = channels[currentPage].id
             let newChannel = await youTubeService.getChannelInfo(channelID: id)
             let playlist = await youTubeService.getVideoPlaylists(withChannelID: id)
             let videos = await youTubeService.getPlaylistVideos(withPlaylistID: playlist[0].id)
             
             await MainActor.run {
                 add(channel: newChannel, playlists: playlist, playlistVideos1: videos)
-                createBanner(with: exampleData[currentPage])
+                createBanner(with: channels[currentPage])
             }
         }
     }
     
     func add(channel: Channel, playlists: [Playlist], playlistVideos1: [Video]) {
-        exampleData[currentPage] = channel
+        channels[currentPage] = channel
         self.playlists = playlists
         self.videos.append(playlistVideos1)
         
         self.playlists[currentPage].videos = videos[videos.count - 1]
         
-        exampleData[currentPage].videoPlaylists = self.playlists
+        channels[currentPage].videoPlaylists = self.playlists
     }
 }
 
@@ -93,7 +91,7 @@ extension YouTubeBannerPageViewController {
     }
     
     private func showNextPage() {
-        guard pages.count != exampleData.count else {
+        guard pages.count != channels.count else {
             print("don't download")
             setNextPage()
             return
@@ -104,7 +102,7 @@ extension YouTubeBannerPageViewController {
     }
     
     private func setNextPage() {
-        if currentPage > exampleData.count - 1 {
+        if currentPage > channels.count - 1 {
             currentPage = 0
         }
         setViewControllers([pages[currentPage]], direction: .forward, animated: true, completion: nil)
@@ -114,7 +112,7 @@ extension YouTubeBannerPageViewController {
     
     
     private func checkCurrentPages() {
-        if currentPage > exampleData.count - 1 {
+        if currentPage > channels.count - 1 {
             currentPage = 0
         } else {
             currentPage += 1

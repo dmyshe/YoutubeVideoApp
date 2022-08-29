@@ -45,12 +45,11 @@ class YouTubeVideoListViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         addGestureRecognizer()
-//        testFetchData()
-        gets()
+        fetchData()
     }
     
     
-    private func gets() {
+    private func fetchData() {
         Task.init {
             let channelID = Channel.exampleData[0].id
             
@@ -151,7 +150,7 @@ extension YouTubeVideoListViewController {
     func createYouTubeBannerCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TopBannerTableViewCell.reuseIdentifier, for: indexPath) as! TopBannerTableViewCell
         cell.pageViewController.bannerInfoDelegate = self
-        cell.pageViewController.exampleData = Channel.exampleData
+        cell.pageViewController.channels = Channel.exampleData
         return cell
     }
     
