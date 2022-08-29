@@ -17,7 +17,7 @@ struct Resources {
     }
     
     enum VideoPlayer {
-        static let cardHandleAreaHeight: CGFloat = 45
+        static let handleAreaHeight: CGFloat = 45
         static let padding: CGFloat = 5
         static let cornerRadius: CGFloat = 15
         static let cornerRadiusAfterAnimation: CGFloat = 20
@@ -35,5 +35,16 @@ struct Resources {
     
     enum PageBannerVC {
         static let cornerRadius: CGFloat = 4
+        static let pageControlDotsBGColor =  UIColor(hex: 0xFFFFFF, alpha: 0.2)
+    }
+    
+    enum VideoCell {
+        static let cornerRadius: CGFloat = 6
+    }
+    
+    enum YouTubeVideoListVC {
+        static let bannerCellHeight: CGFloat = 250
+        static let playlistSmall: CGFloat = 110
+        static let playlistLarge: CGFloat = 190
     }
 }

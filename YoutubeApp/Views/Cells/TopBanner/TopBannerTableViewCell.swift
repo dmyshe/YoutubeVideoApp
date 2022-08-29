@@ -8,9 +8,7 @@
 import UIKit
 import SDWebImage
 
-class TopBannerTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "TopBannerTableViewCell"
-    
+class TopBannerTableViewCell: UITableViewCell {    
     @IBOutlet  weak var bannerView: UIView!
     
     let pageViewController = YouTubeBannerPageViewController()
@@ -21,10 +19,5 @@ class TopBannerTableViewCell: UITableViewCell {
         pageViewController.view.frame = self.bannerView.bounds
 
         self.bannerView.addSubview(pageViewController.view)
-    }
-   
-    static func nib() -> UINib {
-        return UINib(nibName: "TopBannerTableViewCell",
-                     bundle: nil)
     }
 }

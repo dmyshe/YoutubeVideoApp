@@ -56,9 +56,14 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zr6-0M-59p" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="gPI-cw-Eyc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" name="videoplayer_bgGradientTop"/>
+                        </textAttributes>
                         <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </textAttributes>
@@ -144,12 +149,17 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5YM-wA-tED" userLabel="Arrow button and VideoView">
                                 <rect key="frame" x="-1" y="0.0" width="415" height="287"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Close_Open" translatesAutoresizingMaskIntoConstraints="NO" id="9tv-YY-l3u">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6GV-Pg-LbH" userLabel="HandleImageView">
                                         <rect key="frame" x="0.0" y="0.0" width="415" height="53.333333333333336"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="9tv-YY-l3u" secondAttribute="height" multiplier="365:47" id="k42-Sn-HFt"/>
-                                        </constraints>
-                                    </imageView>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Close_Open" translatesAutoresizingMaskIntoConstraints="NO" id="9tv-YY-l3u">
+                                                <rect key="frame" x="0.0" y="0.0" width="415" height="53.333333333333336"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="9tv-YY-l3u" secondAttribute="height" multiplier="365:47" id="k42-Sn-HFt"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                    </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7oK-V9-ZGD" customClass="YTPlayerView">
                                         <rect key="frame" x="0.0" y="53.333333333333329" width="415" height="233.66666666666669"/>
                                         <color key="backgroundColor" systemColor="labelColor"/>
@@ -195,7 +205,7 @@
                                     <constraint firstAttribute="width" secondItem="8ru-59-ofK" secondAttribute="height" multiplier="339:31" id="Qrj-Fl-1gB"/>
                                 </constraints>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="b0p-TE-u9x" userLabel="Video title and views">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="b0p-TE-u9x" userLabel="Video title and views count">
                                 <rect key="frame" x="53" y="355" width="308" height="58.666666666666686"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Mondo Marcio - Angeli e De..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SGV-AB-cnv">
@@ -299,7 +309,10 @@
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="a9O-bL-DGJ" id="FmC-YK-W1B"/>
+                        <outlet property="controlsButtonStackView" destination="vsV-MG-EIr" id="blG-5D-ehj"/>
                         <outlet property="currentTimeLabel" destination="ixd-TX-Lfd" id="TIG-yG-lu0"/>
+                        <outlet property="durationSliderAndLabelsStackView" destination="8ru-59-ofK" id="hyh-hl-UuS"/>
+                        <outlet property="handleArea" destination="6GV-Pg-LbH" id="iwB-dQ-9oS"/>
                         <outlet property="handleAreaImageView" destination="9tv-YY-l3u" id="Ia4-eR-NQl"/>
                         <outlet property="playButton" destination="rjE-kH-5qj" id="N3c-DA-m2W"/>
                         <outlet property="playNextPlaylistVideo" destination="Kfk-cg-8KT" id="kzn-7V-dVz"/>
@@ -307,9 +320,11 @@
                         <outlet property="remainingTimeLabel" destination="Sdf-rb-MR9" id="LHs-1s-Dec"/>
                         <outlet property="videoDurationSlider" destination="E92-jq-o8E" id="qCc-af-jIb"/>
                         <outlet property="videoPlayerView" destination="7oK-V9-ZGD" id="Jhk-1P-fTF"/>
+                        <outlet property="videoTitleAndViewCountStackView" destination="b0p-TE-u9x" id="xbu-Ns-Mne"/>
                         <outlet property="videoTitleLabel" destination="SGV-AB-cnv" id="40b-Ua-rjo"/>
                         <outlet property="videoViewsLabel" destination="2cW-5U-CP4" id="4ex-yR-Sjo"/>
                         <outlet property="volumeSlider" destination="5Ug-y5-MXG" id="Lwh-ff-stP"/>
+                        <outlet property="volumeSliderAndIconsStackView" destination="kxh-Us-mCK" id="4AB-1r-rth"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KeX-ZQ-UNX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -12,12 +12,9 @@ class YouTubeVideoListViewController: UIViewController {
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
     private var videoPlayerVC: YouTubeVideoPlayerViewController!
-    var blackView: UIView!
-    var blackViewForNavigation: UIView!
+    private var blackView: UIView!
     
-    lazy var cardHeight: CGFloat = view.bounds.height / 1.2
-    
-    var bottomSheetVisible = false
+    private lazy var bottomSheetHeight: CGFloat = view.bounds.height / 1.2
     
     enum YouTubeCellType: Int {
         case banner, playlistSmall, playlistLarge
@@ -27,6 +24,8 @@ class YouTubeVideoListViewController: UIViewController {
         case expanded, collapsed
     }
     
+    private var bottomSheetVisible = false
+    
     private var nextState: BottomSheetState {
         return bottomSheetVisible ?  .collapsed : .expanded
     }
@@ -34,31 +33,50 @@ class YouTubeVideoListViewController: UIViewController {
     private var runningAnimations = [UIViewPropertyAnimator]()
     private var animationProgressWhenInterrupted: CGFloat = 0
     
-    private var channel = [Channel]()
+    private var channels = [Channel]()
     private var videos = [[Video]]()
+    private var playlists = [Playlist]()
     
-    var (videoPositionInPlaylist, playlistNumber) = (0,0)
-    
+    private var (videoPositionInPlaylist, playlistNumber) = (0,0)
     
     private let youTubeService = YouTubeServiceAdapter(apiKey: YoutubeAPI.apiKey)
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         addGestureRecognizer()
-        fetchData()
+//        testFetchData()
+        gets()
     }
-        
-   private func fetchData() {
+    
+    
+    private func gets() {
         Task.init {
-            let playlist1 = await youTubeService.getFullPlaylistVideos(playlistID: Dragons.testPlaylist1)
-            self.videos.append(playlist1)
+            let channelID = Channel.exampleData[0].id
             
-            let playlist2 = await youTubeService.getFullPlaylistVideos(playlistID: MarcusBrownlee.testPlaylist1)
-            self.videos.append(playlist2)
+            let channel = await  youTubeService.getChannelInfo(channelID: channelID)
+            let playlist = await youTubeService.getVideoPlaylists(withChannelID: channelID)
+            let videos = await youTubeService.getPlaylistVideos(withPlaylistID: playlist[0].id)
+            let videos2 = await youTubeService.getPlaylistVideos(withPlaylistID: playlist[1].id)
             
+            add(channel: channel, playlists: playlist, playlistVideos1: videos, playlistVideos2: videos2)
+            
+            dump(channels)
+            dump(videos)
             await self.showTableView()
         }
+    }
+    
+    func add(channel: Channel, playlists: [Playlist], playlistVideos1: [Video], playlistVideos2: [Video]) {
+        channels.append(channel)
+        self.playlists = playlists
+        self.videos.append(playlistVideos1)
+        self.videos.append(playlistVideos2)
+        
+        self.playlists[0].videos = playlistVideos1
+        self.playlists[1].videos = playlistVideos1
+
+        channels[0].videoPlaylists = self.playlists
     }
 }
 
@@ -118,11 +136,11 @@ extension YouTubeVideoListViewController: UITableViewDataSource {
         let currentCell = YouTubeCellType(rawValue: indexPath.section)!
         switch currentCell {
         case .banner:
-            return 250
+            return Resources.YouTubeVideoListVC.bannerCellHeight
         case .playlistSmall:
-            return 110
+            return Resources.YouTubeVideoListVC.playlistSmall
         case .playlistLarge:
-            return 180
+            return Resources.YouTubeVideoListVC.playlistLarge
         }
     }
 }
@@ -133,6 +151,7 @@ extension YouTubeVideoListViewController {
     func createYouTubeBannerCell(_ tableView: UITableView, _ indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TopBannerTableViewCell.reuseIdentifier, for: indexPath) as! TopBannerTableViewCell
         cell.pageViewController.bannerInfoDelegate = self
+        cell.pageViewController.exampleData = Channel.exampleData
         return cell
     }
     
@@ -148,10 +167,10 @@ extension YouTubeVideoListViewController {
         let currentCell = YouTubeCellType(rawValue: indexPath.section)!
         switch currentCell {
         case .playlistSmall:
-            cell.tag = currentCell.rawValue
+            cell.tag = currentCell.rawValue - 1
             cell.configure(cellSize: .small)
         case .playlistLarge:
-            cell.tag = currentCell.rawValue
+            cell.tag = currentCell.rawValue - 1
             cell.configure(cellSize: .large)
         default:
             break
@@ -164,17 +183,17 @@ extension YouTubeVideoListViewController {
 
 extension YouTubeVideoListViewController {
     func addGestureRecognizer() {
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleCardPan))
-        videoPlayerVC.handleAreaImageView.addGestureRecognizer(panGestureRecognizer)
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(hadnleBottomSheet))
+        videoPlayerVC.handleArea.addGestureRecognizer(panGestureRecognizer)
     }
     
-    @objc func handleCardPan (recognizer:UIPanGestureRecognizer) {
+    @objc func hadnleBottomSheet (recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .began:
             startInteractiveTransition(state: nextState, duration: 0.9)
         case .changed:
-            let translation = recognizer.translation(in: self.videoPlayerVC.handleAreaImageView)
-            var fractionComplete = translation.y / cardHeight
+            let translation = recognizer.translation(in: self.videoPlayerVC.handleArea)
+            var fractionComplete = translation.y / bottomSheetHeight
             fractionComplete = bottomSheetVisible ? fractionComplete : -fractionComplete
             updateInteractiveTransition(fractionCompleted: fractionComplete)
         case .ended:
@@ -189,6 +208,7 @@ extension YouTubeVideoListViewController {
         if runningAnimations.isEmpty {
             animateTransitionIfNeeded(state: state, duration: duration)
         }
+        
         for animation in runningAnimations {
             animation.pauseAnimation()
             animationProgressWhenInterrupted = animation.fractionComplete
@@ -205,11 +225,11 @@ extension YouTubeVideoListViewController {
         guard runningAnimations.isEmpty else { return }
         
         let collapseBottomSheet = {
-            self.videoPlayerVC.view.frame.origin.y = self.view.frame.height - Resources.VideoPlayer.cardHandleAreaHeight
+            self.videoPlayerVC.view.frame.origin.y = self.view.frame.height - Resources.VideoPlayer.handleAreaHeight
         }
         
         let expandBottomSheet = {
-            self.videoPlayerVC.view.frame.origin.y = self.view.frame.height - self.cardHeight
+            self.videoPlayerVC.view.frame.origin.y = self.view.frame.height - self.bottomSheetHeight
         }
         
         let frameAnimator = createPropertyAnimator(state: state,
@@ -219,8 +239,15 @@ extension YouTubeVideoListViewController {
         
         startPropertyAnimation(frameAnimator)
         
-        let darkenScreen =  { self.blackView.alpha = Resources.VideoPlayer.backgroundDarker }
-        let lightUpScreen =  { self.blackView.alpha = 0.0 }
+        let darkenScreen =  {
+            self.blackView.alpha = Resources.VideoPlayer.backgroundDarker
+            self.navigationController?.navigationBar.alpha = Resources.VideoPlayer.backgroundDarker
+
+        }
+        let lightUpScreen =  {
+            self.blackView.alpha = 0.0
+            self.navigationController?.navigationBar.alpha = 1
+        }
         
         let blurAnimator = createPropertyAnimator(state: state,
                                                   onExpanded: darkenScreen(),
@@ -241,7 +268,24 @@ extension YouTubeVideoListViewController {
                                                           onExpanded: animateCornerRadius(),
                                                           onCollapsed: animateBackCornerRadius(),
                                                           duration: duration)
+        
         startPropertyAnimation(cornerRadiusAnimator)
+        
+        
+        let rotateImageDown = {
+            self.videoPlayerVC.handleAreaImageView.transform = .identity
+        }
+        
+        let rotateImageUp = {
+            self.videoPlayerVC.handleAreaImageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi )
+        }
+        
+        let handleArrowImageAnimator = createPropertyAnimator(state: state,
+                                                              onExpanded: rotateImageDown(),
+                                                              onCollapsed: rotateImageUp(),
+                                                              duration: duration)
+        
+        startPropertyAnimation(handleArrowImageAnimator)
         
         frameAnimator.addCompletion { _ in
             self.bottomSheetVisible.toggle()
@@ -288,7 +332,7 @@ extension YouTubeVideoListViewController {
         tableView.register(PlaylistTableViewCell.nib(), forCellReuseIdentifier: PlaylistTableViewCell.reuseIdentifier)
         tableView.register(SectionTitleTableViewCell.nib(), forCellReuseIdentifier: SectionTitleTableViewCell.reuseIdentifier)
         
-        tableView.contentInset =  UIEdgeInsets(top: -30, left: 0, bottom: 0, right: 0)
+        tableView.contentInset =  UIEdgeInsets(top: -50, left: 0, bottom: 0, right: 0)
     }
     
     private func setupVideoPlayerVC() {
@@ -296,7 +340,7 @@ extension YouTubeVideoListViewController {
         
         addChild(videoPlayerVC)
         
-        let bottomScreen = self.view.frame.height - Resources.VideoPlayer.cardHandleAreaHeight
+        let bottomScreen = self.view.frame.height - Resources.VideoPlayer.handleAreaHeight
         
         videoPlayerVC.view.layer.cornerRadius = Resources.VideoPlayer.cornerRadius
         videoPlayerVC.view.frame = view.frame.inset(by: UIEdgeInsets(top: bottomScreen,
@@ -316,12 +360,13 @@ extension YouTubeVideoListViewController {
         videoPlayerVC.dataSource = self
     }
     
+    
     private func setupBlackView() {
-                blackView = UIView()
-                blackView.backgroundColor = .black
-                blackView.alpha = 0
-                blackView.frame = view.bounds
-                view.insertSubview(blackView, belowSubview: videoPlayerVC.view)
+        blackView = UIView()
+        blackView.backgroundColor = .black
+        blackView.alpha = 0
+        blackView.frame = view.bounds
+        view.insertSubview(blackView, belowSubview: videoPlayerVC.view)
     }
     
     @MainActor
@@ -333,8 +378,9 @@ extension YouTubeVideoListViewController {
 }
 
 extension YouTubeVideoListViewController: YouTubeBannerPageViewControllerDelegate {
-    func bannerClicked(playlistVideoID: String) {
-        videoPlayerVC.loadVideoPlaylist(id: playlistVideoID)
+    func bannerClicked(playlistVideos: [Video]) {
+        videoPlayerVC.loadPlaylistVideos(playlistVideos)
+        animateTransitionIfNeeded(state: .expanded, duration: 0.9)
     }
 }
 
@@ -344,7 +390,11 @@ extension YouTubeVideoListViewController: PlaylistTableViewCellDelegate {
         self.videoPositionInPlaylist = positionInPlaylist
         self.playlistNumber = playlistNumber
         
-        videoPlayerVC.loadVideoWith(id: video.id)
+        videoPlayerVC.loadVideo(with: video.id)
+        
+        animateTransitionIfNeeded(state: .expanded, duration: 0.9)
+
+        
         Task {
         await videoPlayerVC.configure(with: video)
         }
@@ -353,18 +403,12 @@ extension YouTubeVideoListViewController: PlaylistTableViewCellDelegate {
 
 
 extension YouTubeVideoListViewController: YouTubeVideoPlayerDataSource {
-    func numbersOfVideosInPlaylist(position: Int) -> Int {
-        return videos[playlistNumber].count
-    }
-    
-    func getVideo(position: Int) -> Video {
-        let video = videos[playlistNumber][position]
-        return video
+    func getVideoPlaylist() -> [Video] {
+        videos[playlistNumber]
     }
 
     func getCurrentVideoPositionInPlaylist() -> Int {
         return videoPositionInPlaylist
     }
     
-
 }

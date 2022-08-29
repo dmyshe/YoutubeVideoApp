@@ -8,28 +8,34 @@
 import UIKit
 
 protocol YouTubeBannerPageViewControllerDelegate : AnyObject {
-    func bannerClicked(playlistVideoID: String)
+    func bannerClicked(playlistVideos: [Video])
 }
 
 
 class YouTubeBannerPageViewController: UIPageViewController {
     var pages: [UIViewController]  = []
-    let pageControl = UIPageControl()
-    var currentPage = 0 
-    var timer: Timer?
+    
+    private let pageControl = UIPageControl()
+    
+    private var currentPage = 0 {
+        didSet {
+            pageControl.currentPage = currentPage
+        }
+    }
+    
+    private var timer: Timer?
     
     weak var bannerInfoDelegate: YouTubeBannerPageViewControllerDelegate?
     
-    var currentPageVC: YouTubeBannerPageViewController {
-        let bannerVC = (pages[currentPage] as! YouTubeBannerPageViewController)
-        return bannerVC
-    }
     
     private let youTubeService = YouTubeServiceAdapter(apiKey: YoutubeAPI.apiKey)
-        
-    var channel: [Channel]? = []
     
-    private var channelExampleData = YoutubeChannelExample.exampleData
+    var channels: [Channel]? = []
+    
+    var exampleData = [Channel]()
+    
+    private var videos = [[Video]]()
+    private var playlists = [Playlist]()
     
     override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
         super.init(transitionStyle: .scroll, navigationOrientation: navigationOrientation, options: options)
@@ -38,28 +44,45 @@ class YouTubeBannerPageViewController: UIPageViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         layout()
-        fetchChannelInfo(withID: channelExampleData[currentPage].id)
+        fetchChannelInfo2()
         createTimer()
         addGestureRecognizer()
     }
     
-    private func fetchChannelInfo(withID id: String) {
-        Task.init {
+    private func fetchChannelInfo2() {
+        Task(priority: .userInitiated) {
+            let id = exampleData[currentPage].id
             let newChannel = await youTubeService.getChannelInfo(channelID: id)
-            await createBanner(with: newChannel)
+            let playlist = await youTubeService.getVideoPlaylists(withChannelID: id)
+            let videos = await youTubeService.getPlaylistVideos(withPlaylistID: playlist[0].id)
+            
+            await MainActor.run {
+                add(channel: newChannel, playlists: playlist, playlistVideos1: videos)
+                createBanner(with: exampleData[currentPage])
+            }
         }
+    }
+    
+    func add(channel: Channel, playlists: [Playlist], playlistVideos1: [Video]) {
+        exampleData[currentPage] = channel
+        self.playlists = playlists
+        self.videos.append(playlistVideos1)
+        
+        self.playlists[currentPage].videos = videos[videos.count - 1]
+        
+        exampleData[currentPage].videoPlaylists = self.playlists
     }
 }
 
 //MARK: - YouTubeBannerVideoPageViewController
 extension YouTubeBannerPageViewController {
     
-    private func createTimer(withInterval interval: TimeInterval = 3.0) {
+    private func createTimer(withInterval interval: TimeInterval = 5.0) {
         timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { _ in
             self.showNextPage()
         })
@@ -70,19 +93,31 @@ extension YouTubeBannerPageViewController {
     }
     
     private func showNextPage() {
-
-        print("PlaylistID",channelExampleData[currentPage].name)
-
-        fetchChannelInfo(withID: channelExampleData[currentPage].id)
+        guard pages.count != exampleData.count else {
+            print("don't download")
+            setNextPage()
+            return
+        }
+        
+        fetchChannelInfo2()
+        
+    }
+    
+    private func setNextPage() {
+        if currentPage > exampleData.count - 1 {
+            currentPage = 0
+        }
+        setViewControllers([pages[currentPage]], direction: .forward, animated: true, completion: nil)
+        checkCurrentPages()
+        
     }
     
     
-    private func checkPages() {
-        if  currentPage < pages.count - 1  {
-            currentPage += 1
-        }
-        else {
+    private func checkCurrentPages() {
+        if currentPage > exampleData.count - 1 {
             currentPage = 0
+        } else {
+            currentPage += 1
         }
     }
     
@@ -90,29 +125,23 @@ extension YouTubeBannerPageViewController {
         dataSource = self
         view.layer.cornerRadius = Resources.PageBannerVC.cornerRadius
     }
-    @MainActor
-    private func createBanner(with channel: Channel) async {
-        if pages.count < channelExampleData.count - 1 {
+    
+    
+    private func createBanner(with channel: Channel)   {
         let vc = YouTubeBannerViewController().initiateVCFromStoryboard()
         vc.channel = channel
         pages.append(vc)
-        setViewControllers([pages[currentPage]], direction: .forward, animated: true, completion: nil)
-        } else {
-            setViewControllers([pages[currentPage]], direction: .forward, animated: true, completion: nil)
-        }
-        
-        checkPages()
-        pageControl.currentPage = currentPage
+        setNextPage()
     }
     
     private func layout() {
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.currentPageIndicatorTintColor = .white
-        pageControl.pageIndicatorTintColor = .black
-        pageControl.numberOfPages = channelExampleData.count
-
+        pageControl.pageIndicatorTintColor = Resources.PageBannerVC.pageControlDotsBGColor
+        pageControl.currentPage = 0
+        pageControl.numberOfPages = 4
         view.addSubview(pageControl)
-       
+        
         NSLayoutConstraint.activate([
             pageControl.widthAnchor.constraint(equalTo: view.widthAnchor),
             pageControl.heightAnchor.constraint(equalToConstant: 15),
@@ -126,9 +155,11 @@ extension YouTubeBannerPageViewController {
     }
     
     @objc private func openVideo(recognizer: UIPanGestureRecognizer) {
-        print("hello")
-        let videoId = channelExampleData[currentPage].playlistID
-        bannerInfoDelegate?.bannerClicked(playlistVideoID: videoId)
+        let index: Int = currentPage - 1
+        
+        let currentPlaylistVideos = videos[index]
+        
+        bannerInfoDelegate?.bannerClicked(playlistVideos: currentPlaylistVideos )
     }
 }
 

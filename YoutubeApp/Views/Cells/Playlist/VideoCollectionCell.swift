@@ -8,9 +8,7 @@
 import UIKit
 import SDWebImage
 
-class VideoCollectionCell: UICollectionViewCell {
-    static let reuseIdentifier = "VideoCollectionCell"
-    
+class VideoCollectionCell: UICollectionViewCell {    
     @IBOutlet private weak var channelPreviewImageView: UIImageView!
     @IBOutlet private weak var channelNameLabel: UILabel!
     @IBOutlet private weak var channelSubscriptionsCountLabel: UILabel!
@@ -19,12 +17,7 @@ class VideoCollectionCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        channelPreviewImageView.layer.cornerRadius = 6
-    }
-    
-    static func nib() -> UINib {
-        return UINib(nibName: "VideoCollectionCell",
-                     bundle: nil)
+        channelPreviewImageView.layer.cornerRadius = Resources.VideoCell.cornerRadius
     }
     
     func configure(video: Video) {
@@ -33,7 +26,7 @@ class VideoCollectionCell: UICollectionViewCell {
         Task.init {
             let viewsCount = await youTubeService.getVideoViewCount(byID: video.id)
             await MainActor.run {
-                self.channelSubscriptionsCountLabel.text = "\(viewsCount) просмотров"
+                self.channelSubscriptionsCountLabel.text = "\(viewsCount.separateNumberIntoGroup()) просмотров"
             }
         }
         

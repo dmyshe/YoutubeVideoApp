@@ -10,4 +10,5 @@ import Foundation
 struct Playlist {
     var name: String
     var id: String
+    var videos: [Video]?
 }

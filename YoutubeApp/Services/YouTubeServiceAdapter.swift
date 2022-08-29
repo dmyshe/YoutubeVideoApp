@@ -146,7 +146,7 @@ extension YouTubeServiceAdapter {
         
         let playlistItemsListQuery = GTLRYouTubeQuery_PlaylistItemsList.query(withPart: queryPart)
         playlistItemsListQuery.playlistId = id
-        //        playlistItemsListQuery.maxResults = 10
+        playlistItemsListQuery.maxResults = 10
         
         service.executeQuery(playlistItemsListQuery) { _, response, error in
             if let error = error {

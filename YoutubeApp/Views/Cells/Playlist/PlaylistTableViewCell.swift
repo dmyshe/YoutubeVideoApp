@@ -12,9 +12,7 @@ protocol PlaylistTableViewCellDelegate: AnyObject {
     func videoDidSelect(video: Video, positionInPlaylist: Int, playlistNumber: Int)
 }
 
-class PlaylistTableViewCell: UITableViewCell {
-    static let reuseIdentifier = "PlaylistTableViewCell"
-    
+class PlaylistTableViewCell: UITableViewCell {    
     @IBOutlet private weak var collectionView: UICollectionView!
     
     weak var delegate: PlaylistTableViewCellDelegate?
@@ -43,11 +41,6 @@ class PlaylistTableViewCell: UITableViewCell {
         collectionView.dataSource = self
         collectionView.contentInset =  UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
     }
-
-    static func nib() -> UINib {
-        return UINib(nibName: "PlaylistTableViewCell",
-                     bundle: nil)
-    }
 }
 
 //MARK: - UICollectionViewDelegate
@@ -56,7 +49,7 @@ extension PlaylistTableViewCell: UICollectionViewDelegate {
         
         let currentVideo = videos[indexPath.row]
         delegate?.videoDidSelect(video: currentVideo, positionInPlaylist: indexPath.row, playlistNumber: collectionView.tag)
-        print(indexPath.row)
+        print(" \(currentCellSize) cell tag is", collectionView.tag)
     }
 }
 
@@ -83,7 +76,7 @@ extension PlaylistTableViewCell: UICollectionViewDataSource,UICollectionViewDele
         case .small:
             return CGSize(width: collectionView.bounds.width / 2.4, height: collectionView.bounds.height - 1)
         case .large:
-            return   CGSize(width: collectionView.bounds.width / 3, height: collectionView.bounds.height - 5)
+            return   CGSize(width: collectionView.bounds.width / 2.7, height: collectionView.bounds.height - 5)
         }
     }
 }

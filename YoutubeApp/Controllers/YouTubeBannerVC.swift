@@ -23,15 +23,13 @@ class YouTubeBannerViewController: UIViewController {
 
 //MARK: - YouTubeBannerViewController
 extension YouTubeBannerViewController {
-    public func initiateVCFromStoryboard() -> YouTubeBannerViewController {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "YouTubeBannerViewController") as! YouTubeBannerViewController
-        return vc
-    }
-    
+
     private func setupUI() {
-        channelNameLabel.text = channel?.title
-        channelSubscribersLabel.text = "\(channel!.subscribersCount) подписчиков"
-        channelImageView.sd_setImage(with: channel?.backGroundBannerURL)
+        guard let channel = channel else { return }
+        channelNameLabel.text = channel.title
+        
+        let subscribersCount = channel.subscribersCount.separateNumberIntoGroup()
+        channelSubscribersLabel.text = "\(subscribersCount) подписчика"
+        channelImageView.sd_setImage(with: channel.backGroundBannerURL)
     }
 }
