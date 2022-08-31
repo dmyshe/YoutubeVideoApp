@@ -152,6 +152,7 @@ extension YouTubeVideoPlayerViewController: YTPlayerViewDelegate {
     
     func playerView(_ playerView: YTPlayerView, didPlayTime playTime: Float) {
         currentTimeLabel.text = playTime.getTimeString()
+        videoDurationSlider.value = playTime
         
         Task {
             let time = try await playerView.duration()
@@ -170,6 +171,7 @@ extension YouTubeVideoPlayerViewController: YTPlayerViewDelegate {
             let duration = try await playerView.duration()
            await MainActor.run {
                set(remainingTimeText: Float(duration).getTimeString(), videoDuration: Float(duration))
+               self.videoDurationSlider.maximumValue = Float(duration)
             }
         }
     }
@@ -227,8 +229,6 @@ extension YouTubeVideoPlayerViewController {
     
     private func set(remainingTimeText: String, videoDuration: Float) {
         self.remainingTimeLabel.text = remainingTimeText
-        self.videoDurationSlider.maximumValue = videoDuration
     }
-    
 }
 
