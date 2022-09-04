@@ -47,12 +47,12 @@ class YouTubeBannerPageViewController: UIPageViewController {
         super.viewDidLoad()
         setup()
         layout()
-        fetchChannelInfo2()
+        getChannelInfo()
         createTimer()
         addGestureRecognizer()
     }
     
-    private func fetchChannelInfo2() {
+    private func getChannelInfo() {
         Task(priority: .userInitiated) {
             let id = channels[currentPage].id
             let newChannel = await youTubeService.getChannelInfo(channelID: id)
@@ -97,7 +97,7 @@ extension YouTubeBannerPageViewController {
             return
         }
         
-        fetchChannelInfo2()
+        getChannelInfo()
         
     }
     
