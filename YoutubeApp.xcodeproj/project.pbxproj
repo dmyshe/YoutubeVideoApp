@@ -127,25 +127,26 @@
 		324F24D528AE492F005D42CD /* YoutubeApp */ = {
 			isa = PBXGroup;
 			children = (
+				329EFB6428C9FBEA002DE7B4 /* Storyboards & Xibs */,
 				3201E6D128B5653300F123EE /* Services */,
 				324F250928B01764005D42CD /* Helpers */,
 				324F250628B01196005D42CD /* Models */,
 				324F24F228AE6634005D42CD /* Views */,
-				324F24EA28AE4941005D42CD /* App */,
+				324F24F328AE6647005D42CD /* Cells */,
+				324F24EA28AE4941005D42CD /* Application */,
 				324F24EC28AE4959005D42CD /* Controllers */,
-				324F24EB28AE4952005D42CD /* Storyboards */,
 				324F24ED28AE4962005D42CD /* Supporting Files */,
 			);
 			path = YoutubeApp;
 			sourceTree = "<group>";
 		};
-		324F24EA28AE4941005D42CD /* App */ = {
+		324F24EA28AE4941005D42CD /* Application */ = {
 			isa = PBXGroup;
 			children = (
 				324F24D628AE492F005D42CD /* AppDelegate.swift */,
 				324F24D828AE492F005D42CD /* SceneDelegate.swift */,
 			);
-			path = App;
+			path = Application;
 			sourceTree = "<group>";
 		};
 		324F24EB28AE4952005D42CD /* Storyboards */ = {
@@ -180,7 +181,6 @@
 		324F24F228AE6634005D42CD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				324F24F328AE6647005D42CD /* Cells */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -219,9 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				32C5589A28B17F8D00E11362 /* VideoCollectionCell.swift */,
-				32C5589B28B17F8D00E11362 /* VideoCollectionCell.xib */,
 				3273CEC128B26970008FDA25 /* PlaylistTableViewCell.swift */,
-				3273CEC228B26970008FDA25 /* PlaylistTableViewCell.xib */,
 			);
 			path = Playlist;
 			sourceTree = "<group>";
@@ -230,7 +228,6 @@
 			isa = PBXGroup;
 			children = (
 				3273CECA28B28292008FDA25 /* TopBannerTableViewCell.swift */,
-				3273CECB28B28292008FDA25 /* TopBannerTableViewCell.xib */,
 			);
 			path = TopBanner;
 			sourceTree = "<group>";
@@ -248,7 +245,6 @@
 			isa = PBXGroup;
 			children = (
 				328DE77628B78051006CFF82 /* SectionTitleTableViewCell.swift */,
-				328DE77728B78051006CFF82 /* SectionTitleTableViewCell.xib */,
 			);
 			path = Title;
 			sourceTree = "<group>";
@@ -272,6 +268,58 @@
 				3291E1D428BC03AF00DB690F /* Float+getTimeString.swift */,
 			);
 			path = Foundation;
+			sourceTree = "<group>";
+		};
+		329EFB6428C9FBEA002DE7B4 /* Storyboards & Xibs */ = {
+			isa = PBXGroup;
+			children = (
+				329EFB6528C9FC20002DE7B4 /* Xibs */,
+				324F24EB28AE4952005D42CD /* Storyboards */,
+			);
+			path = "Storyboards & Xibs";
+			sourceTree = "<group>";
+		};
+		329EFB6528C9FC20002DE7B4 /* Xibs */ = {
+			isa = PBXGroup;
+			children = (
+				329EFB6628C9FC2E002DE7B4 /* Cells */,
+			);
+			path = Xibs;
+			sourceTree = "<group>";
+		};
+		329EFB6628C9FC2E002DE7B4 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				329EFB6928C9FC58002DE7B4 /* Title */,
+				329EFB6828C9FC44002DE7B4 /* Playlist */,
+				329EFB6728C9FC37002DE7B4 /* TopBanner */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		329EFB6728C9FC37002DE7B4 /* TopBanner */ = {
+			isa = PBXGroup;
+			children = (
+				3273CECB28B28292008FDA25 /* TopBannerTableViewCell.xib */,
+			);
+			path = TopBanner;
+			sourceTree = "<group>";
+		};
+		329EFB6828C9FC44002DE7B4 /* Playlist */ = {
+			isa = PBXGroup;
+			children = (
+				3273CEC228B26970008FDA25 /* PlaylistTableViewCell.xib */,
+				32C5589B28B17F8D00E11362 /* VideoCollectionCell.xib */,
+			);
+			path = Playlist;
+			sourceTree = "<group>";
+		};
+		329EFB6928C9FC58002DE7B4 /* Title */ = {
+			isa = PBXGroup;
+			children = (
+				328DE77728B78051006CFF82 /* SectionTitleTableViewCell.xib */,
+			);
+			path = Title;
 			sourceTree = "<group>";
 		};
 		D70EA8249BD540C2DB4A0BA4 /* Pods */ = {
